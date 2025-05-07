@@ -8,11 +8,14 @@ const CommentPage = () => {
   const { postId } = useParams();
   const [comments, setComments] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [parentId, setParentId] = useState(null);
 
   const loadComments = async () => {
-    const res = await getCommentsByPost(postId);
-    setComments(res.data);
+    try {
+      const res = await getCommentsByPost(postId);
+      setComments(res.data);
+    } catch (error) {
+      console.error("Error loading comments:", error);
+    }
   };
 
   useEffect(() => {
@@ -20,24 +23,34 @@ const CommentPage = () => {
   }, [postId]);
 
   return (
-    <div>
-      <button onClick={() => window.history.back()}>Back to Post</button>
-      <h2>Comments</h2>
-      <button
-        onClick={() => {
-          setModalOpen(true);
-          setParentId(null);
-        }}
-      >
-        Write your comment here
+    <div className="max-w-2xl mx-auto p-4">
+      <button onClick={() => window.history.back()} className="mb-4 text-blue-600 underline">
+        ← Back to Post
       </button>
-      {comments.map((c) => (
-        <CommentItem key={c.id} comment={c} refresh={loadComments} />
-      ))}
+
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Comments</h2>
+        <button
+          onClick={() => setModalOpen(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Add Comment
+        </button>
+      </div>
+
+      {comments.length === 0 ? (
+        <p className="text-gray-500">No comments yet.</p>
+      ) : (
+        <div className="space-y-4">
+          {comments.map((c) => (
+            <CommentItem key={c.id} comment={c} refresh={loadComments} />
+          ))}
+        </div>
+      )}
+
       {modalOpen && (
         <CommentModal
           postId={postId}
-          parentId={parentId}
           onClose={() => setModalOpen(false)}
           onSuccess={loadComments}
         />
@@ -45,4 +58,5 @@ const CommentPage = () => {
     </div>
   );
 };
+
 export default CommentPage;

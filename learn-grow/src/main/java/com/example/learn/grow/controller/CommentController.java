@@ -1,4 +1,4 @@
-package com.example.learn.grow.controller;
+/*package com.example.learn.grow.controller;
 
 import com.example.learn.grow.model.Comment;
 import com.example.learn.grow.service.CommentService;
@@ -40,5 +40,52 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.noContent().build();
+    }
+}
+
+
+*/
+
+
+package com.example.learn.grow.controller;
+
+import com.example.learn.grow.model.Comment;
+import com.example.learn.grow.service.CommentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
+public class CommentController {
+
+    private final CommentService commentService;
+
+    @GetMapping("/comments")
+    public List<Comment> getAllComments() {
+        return commentService.getAllComments();
+    }
+
+    @GetMapping("/posts/{postId}/comments")
+    public List<Comment> getCommentsByPost(@PathVariable Long postId) {
+        return commentService.getCommentsByPost(postId);
+    }
+
+    @PostMapping("/posts/{postId}/comments")
+    public Comment createComment(@PathVariable Long postId, @RequestBody Comment comment) {
+        return commentService.createComment(postId, comment);
+    }
+
+    @PutMapping("/comments/{id}")
+    public Comment updateComment(@PathVariable Long id, @RequestBody Comment comment) {
+        return commentService.updateComment(id, comment);
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public void deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
     }
 }

@@ -4,37 +4,42 @@ import CommentModal from "./CommentModal";
 
 const CommentItem = ({ comment, refresh }) => {
   const [editMode, setEditMode] = useState(false);
-  const [replyMode, setReplyMode] = useState(false);
 
   const handleDelete = async () => {
-    await deleteComment(comment.id);
-    alert("Comment deleted successfully");
-    refresh();
+    try {
+      await deleteComment(comment.id);
+      alert("Comment deleted successfully");
+      refresh();
+    } catch (err) {
+      alert("Failed to delete comment.");
+      console.error(err);
+    }
   };
 
   return (
-    <div
-      style={{
-        marginLeft: comment.parent ? 20 : 0,
-        borderLeft: "1px solid #ccc",
-        paddingLeft: 10,
-      }}
-    >
+    <div className="border-b border-gray-300 py-2">
       <p>
         <strong>{comment.author}</strong>: {comment.content}
       </p>
-      <button onClick={() => setReplyMode(true)}>Reply</button>
-      <button onClick={() => setEditMode(true)}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
-
-      {comment.replies &&
-        comment.replies.map((child) => (
-          <CommentItem key={child.id} comment={child} refresh={refresh} />
-        ))}
+      <div className="space-x-2 mt-1">
+        <button
+          onClick={() => setEditMode(true)}
+          className="text-blue-600 hover:underline"
+        >
+          Edit
+        </button>
+        <button
+          onClick={handleDelete}
+          className="text-red-600 hover:underline"
+        >
+          Delete
+        </button>
+      </div>
 
       {editMode && (
         <CommentModal
           comment={comment}
+          postId={comment.postId}
           onClose={() => setEditMode(false)}
           onSuccess={() => {
             refresh();
@@ -42,19 +47,8 @@ const CommentItem = ({ comment, refresh }) => {
           }}
         />
       )}
-
-      {replyMode && (
-        <CommentModal
-          parentId={comment.id}
-          postId={comment.postId}
-          onClose={() => setReplyMode(false)}
-          onSuccess={() => {
-            refresh();
-            setReplyMode(false);
-          }}
-        />
-      )}
     </div>
   );
 };
+
 export default CommentItem;
