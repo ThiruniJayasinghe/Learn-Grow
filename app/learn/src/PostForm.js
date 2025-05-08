@@ -32,7 +32,7 @@ const PostForm = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:8080/api/post", formData, {
+      const response = await axios.post("http://localhost:8080/api/postnew/post", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

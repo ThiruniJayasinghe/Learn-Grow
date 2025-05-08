@@ -9,7 +9,7 @@ const PostList = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/posts");
+      const response = await axios.get("http://localhost:8080/api/postnew/posts");
 
       // Map filePaths to full fileUrls
       const updatedPosts = response.data.map((post) => ({
@@ -29,7 +29,7 @@ const PostList = () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/${id}`);
+      await axios.delete(`http://localhost:8080/api/postnew/${id}`);
       alert("Post deleted successfully!");
       fetchPosts();
     } catch (error) {

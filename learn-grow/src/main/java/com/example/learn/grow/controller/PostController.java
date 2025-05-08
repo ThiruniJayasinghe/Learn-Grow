@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/postnew")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class PostController {

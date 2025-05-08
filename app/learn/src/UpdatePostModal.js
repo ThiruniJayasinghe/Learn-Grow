@@ -31,7 +31,7 @@ const UpdatePostModal = ({ post, onClose, onUpdate }) => {
         formData.append("deletedFiles", JSON.stringify(deletedFiles));
 
         try {
-            await axios.put(`http://localhost:8080/api/${post.id}`, formData, {
+            await axios.put(`http://localhost:8080/api/postnew/${post.id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
